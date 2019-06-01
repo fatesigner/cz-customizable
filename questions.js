@@ -44,12 +44,25 @@ module.exports = {
     messages.footer = messages.footer || 'List any ISSUES CLOSED by this change (optional). E.g.: #31, #34:\n';
     messages.confirmCommit = messages.confirmCommit || 'Are you sure you want to proceed with the commit above?';
 
+    const valueL = config.types.reduce((x, y) => {
+      return Math.max(x, y.value.length);
+    }, 0);
+    const types = config.types.map((x, i) => {
+      x.name = `${(i + 1)
+        .toString()
+        .padStart(config.types.length / 10 + 1, ' ')}. ${x.value.padEnd(
+        valueL + 2,
+        ' '
+      )}${x.name}`;
+      return x;
+    });
+
     let questions = [
       {
         type: 'list',
         name: 'type',
         message: messages.type,
-        choices: config.types,
+        choices: types
       },
       {
         type: 'list',
